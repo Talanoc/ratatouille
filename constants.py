@@ -5,22 +5,23 @@ Created on Wed Oct 21 11:09:34 2020
 @author: 33633
 """
 
-#import os
+db_name = " ratatouille"
+
+qty_prod =10
 
 # ------------ Some Categories from OpenFood Facts ------------ #
 categories = [
-    "Boissons",
+    "Eaux",
+    "Charcuteries",
     "Viandes",
     "Produits laitiers",
-    "Plats préparés",
-    "Biscuits et gâteaux",
     "Desserts",
-    "Produits de la mer"
-    "poissons",
-    "bonbons"
+    "Plats préparés surgelés",
+    "Chips",
+    "Fromages"
     ]
 
-# ------------ Some useful fields required for each product requested ------------ #
+# -------- Some useful fields required for each product requested --------- #
 chosen_fields = [
     "product_name_fr",
     "generic_name_fr",
@@ -30,6 +31,6 @@ chosen_fields = [
     "nutrition_grades",
     "pnns_groups_1",
     "pnns_groups_2",
-    "stores"    
+    "stores"
     ]
 
