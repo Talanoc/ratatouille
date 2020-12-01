@@ -16,3 +16,4 @@ window.iconbitmap("rat.ico")
 window.config(background='#006699')
 #afficher
 window.mainloop()
+

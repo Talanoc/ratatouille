@@ -1,71 +1,109 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Oct 29 23:55:59 2020
+Created on Fri Nov 13 14:36:32 2020
 
 @author: 33633
 """
-
 import mysql.connector
-from constants import db_name
+from constants import *
+import requests
 
 
-# connexion à la base de données
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password=""
-    )
+class Database:
 
-# créer un curseur de base de données pour effectuer des opérations SQL
-cur = db.cursor()
-cur.execute("DROP DATABASE IF EXISTS" + db_name)
-# exécuter le curseur avec la méthode execute() et transmis la requête SQL
-cur.execute("CREATE DATABASE IF NOT EXISTS" + db_name)
-cur.execute("USE" + db_name)
+    def __init__(self):
+        self.db_name = db_name
+        self.table = table
+        
 
-cur.execute("""
-            CREATE TABLE IF NOT EXISTS db_product (
-    id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    product_name_fr VARCHAR(100) NOT NULL DEFAULT 'N/A',
-    code VARCHAR(13) ,
-    brands VARCHAR(100) NOT NULL DEFAULT 'N/A',
-    url VARCHAR(150) NOT NULL DEFAULT 'N/A',
-    nutrition_grades CHAR(1) NOT NULL DEFAULT 'x',
-    stores VARCHAR(200) NOT NULL DEFAULT 'N/A',
-    PRIMARY KEY(id)
-);
-""")
+    def connect(self):
+        self.con()
+        self.cur.execute("USE" + self.db_name)
 
-cur.execute("""
-            CREATE TABLE IF NOT EXISTS owner_product (
-    id SMALLINT UNSIGNED NOT NULL,
-    product_name_fr VARCHAR(100) NOT NULL,
-    code VARCHAR(13) NOT NULL UNIQUE,
-    brands VARCHAR(100) NOT NULL,
-    url VARCHAR(150) NOT NULL,
-    nutri_grades CHAR(1) NOT NULL,
-    stores VARCHAR(100),
-    date_creation TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-    PRIMARY KEY(id)
-);
-""")
+    def con(self):
+        self.db = mysql.connector.connect(host="localhost",
+                                          user="root", password="")
+        self.cur=self.db.cursor()
 
-cur.execute("""
-            CREATE TABLE IF NOT EXISTS history_product (
-    id SMALLINT UNSIGNED NOT NULL,
-    product_name_fr VARCHAR(100) NOT NULL,
-    old_id SMALLINT UNSIGNED NOT NULL,
-    old_product_name_fr VARCHAR(100) NOT NULL,
-    date_creation TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ,
-    PRIMARY KEY(id)
-);
-""")
+    def destruct_db(self):
+
+        self.con()
+        self.cur.execute("DROP DATABASE IF EXISTS" + self.db_name)
+
+    def create_db(self):
+
+        self.con()
+        self.cur.execute("CREATE DATABASE IF NOT EXISTS" + self.db_name)
+        self.cur.execute("USE" + self.db_name)
+
+        for table in self.table:
+            self.cur.execute(table)
+
+    def use_db(self):
+        
+        self.categories = categories
+        self.connect()
 
 
-cur.execute("""
-            CREATE TABLE IF NOT EXISTS category_product (
-    category VARCHAR(100) NOT NULL,
-    last_index_category SMALLINT UNSIGNED NOT NULL
+    def insert_category(self):
 
-);
-""")
+        self.use_db()
+        for n in range (len((self.categories))):
+            cat=self.categories[n]
+            self.cur.execute("INSERT INTO category_product(category) VALUES "\
+                        "('"+cat+"')")
+            self.db.commit()
+
+    def insert_product(self):
+
+        self.categories = categories
+        self.connect()
+
+        search_url = "https://fr.openfoodfacts.org/cgi/search.pl?"
+        headers = {"User-Agent": "P5_PurBeurre - Version 1.0"}
+
+        for category in self.categories:
+
+            i = 1
+            products_resu = []
+            for i in range(1, 2):
+                payload = {"action": "process",
+                           "tagtype_0": "categories",
+                           "tag_contains_0": "contains",
+                           "tag_0": category,
+                           "tagtype_1": "countries",
+                           "tag_contains_1": "contains",
+                           "tag_1": "france",
+                           "tagtype_2": "categories_lc",
+                           "tag_contains_2": "contains",
+                           "tag_2": "fr",
+                           # Sort by popularity
+                           "sort_by": "unique_scans_n",
+                           "page": 1,
+                           "page_size": qty_prod,
+                           "json": True}
+
+                req = requests.get(search_url, params=payload, headers=headers)
+                results_json = req.json()
+                products_json = results_json["products"]
+
+                for product in products_json:
+                    product_resu = {
+                                key: value for key, value in product.items()
+                                if key in chosen_fields and value != " "
+                             }
+
+                    if len(product_resu) == len(chosen_fields):
+
+                        x=product_resu["categories"]
+                        for i,cat in enumerate(self.categories):
+                            if cat in x:
+                                product_resu["categories"]=i+1
+
+                        self.cur.execute("""INSERT INTO db_product (product_name_fr,category,
+                                    code,brands,url,nutrition_grades,stores
+                                    ) VALUES (%(product_name_fr)s,(%(categories)s),
+                                    %(code)s,%(brands)s,%(url)s,%(nutrition_grades)s,%(stores)s)""", product_resu)
+
+                        self.db.commit()
+

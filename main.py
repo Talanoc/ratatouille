@@ -4,12 +4,34 @@ Created on Fri Oct 30 23:05:30 2020
 
 @author: 33633
 """
-from database import db_init
-from constants import db_name
+import requests
+from database import Database
+from constants import *
+from display import Menus
+
 
 def main():
-    db_init(db_name)
-    
-    
-    
-main
+
+    ratatouille_db = Database()
+    ratatouille = Menus()
+
+    try:
+        ratatouille_db.use_db()
+
+    except:
+
+        ratatouille_db.create_db()
+        ratatouille_db.insert_category()
+        print("La base est en cours de chargement")
+        ratatouille_db.insert_product()
+        ratatouille.first_display()
+
+    else:
+
+        ratatouille.first_display()
+
+
+if __name__ == '__main__':
+
+    main()
+

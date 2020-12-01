@@ -12,65 +12,85 @@ from constants import categories, chosen_fields, db_name, qty_prod
 
 z = 0
 r = 0
-last_index_category=0
 qte = []
 
-#def filling_db():
-    # connexion à la base de données
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password=""
-    )
-# créer un curseur de base de données pour effectuer des opérations SQL
-cur = db.cursor()
-cur.execute("USE" + db_name)
-search_url = "https://fr.openfoodfacts.org/cgi/search.pl?"
-headers = {"User-Agent": "P5_PurBeurre - Version 1.0"}
 
-for category in categories:
-    q = 0
-    i = 1
-    products_resu = []
-    for i in range(1, 2):
-        payload = {"action": "process",
-                   "tagtype_0": "categories",
-                   "tag_contains_0": "contains",
-                   "tag_0": category,
-                   "tagtype_1": "countries",
-                   "tag_contains_1": "contains",
-                   "tag_1": "france",
-                   "tagtype_2": "categories_lc",
-                   "tag_contains_2": "contains",
-                   "tag_2": "fr",
-                   # Sort by popularity
-                   "sort_by": "unique_scans_n",
-                   "page": i,
-                   "page_size": qty_prod,
-                   "json": True}
-       
-        req = requests.get(search_url, params=payload, headers=headers)
-        
-        results_json = req.json()
-        products_json = results_json["products"]
-     
-        for product in products_json:
+class Db_data:
 
-            product_resu = {
-                        key: value for key, value in product.items()
-                        if key in chosen_fields and value != " "
-                     }
-            
-            if len(product_resu) == len(chosen_fields):
-             
-                cur.execute("""INSERT INTO db_product (product_name_fr,
-                            code,brands,url,nutrition_grades,stores
-                            ) VALUES (%(product_name_fr)s,
-                            %(code)s,%(brands)s,%(url)s,%(nutrition_grades)s,%(stores)s)""",product_resu)
-                last_index_category=last_index_category + 1
-                db.commit()
-                print ("La base de données comprend",last_index_category,"articles")
+    def __init__(self):
+        pass
 
+    def connect(self):
+        self.db = mysql.connector.connect(host="localhost",
+                                          user="root", password=" ")
+
+    def insert_cat(self, categories):
+
+        self.categories = categories
+        self.connect()
+
+        for cat in self.categories:
+            cur.execute("""INSERT INTO category_product (category)
+                                 VALUES (%(category)s)""", cat)
+
+
+    def filling_db(self):
+        # connexion à la base de données
+        db = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password=""
+            )
+        # créer un curseur de base de données pour effectuer des opérations SQL
+        cur = db.cursor()
+        cur.execute("USE" + db_name)
+        search_url = "https://fr.openfoodfacts.org/cgi/search.pl?"
+        headers = {"User-Agent": "P5_PurBeurre - Version 1.0"}
+    
+        for category in categories:
+    
+            i = 1
+            products_resu = []
+            for i in range(1, 2):
+                payload = {"action": "process",
+                           "tagtype_0": "categories",
+                           "tag_contains_0": "contains",
+                           "tag_0": category,
+                           "tagtype_1": "countries",
+                           "tag_contains_1": "contains",
+                           "tag_1": "france",
+                           "tagtype_2": "categories_lc",
+                           "tag_contains_2": "contains",
+                           "tag_2": "fr",
+                           # Sort by popularity
+                           "sort_by": "unique_scans_n",
+                           "page": i,
+                           "page_size": qty_prod,
+                           "json": True}
+    
+                req = requests.get(search_url, params=payload, headers=headers)
+    
+                results_json = req.json()
+                products_json = results_json["products"]
+    
+                for product in products_json:
+    
+                    product_resu = {
+                                key: value for key, value in product.items()
+                                if key in chosen_fields and value != " "
+                             }
+    
+                    if len(product_resu) == len(chosen_fields):
+    
+                        cur.execute("""INSERT INTO db_product (product_name_fr,
+                                    code,brands,url,nutrition_grades,stores
+                                    ) VALUES (%(product_name_fr)s,
+                                    %(code)s,%(brands)s,%(url)s,%(nutrition_grades)s,%(stores)s)""", product_resu)
+                        last_index_category=last_index_category + 1
+                        db.commit()
+                        print ("La base de données comprend",last_index_category,"articles")
+
+'''
                 cat = (category, last_index_category)
     cur.execute("""INSERT INTO category_product (category, last_index_category  ) VALUES(%s, %s)""", cat)
     db.commit()
@@ -78,7 +98,7 @@ for category in categories:
 cur.execute("""INSERT INTO category_product (category, last_index_category  ) VALUES(%s, %s)""", cat)
 db.commit()                
 
-'''
+
 
 # ---affichage d'une categorie---#
 #def category_display():
@@ -125,4 +145,3 @@ if y != 0:
                 %s,%s,%s,%s)""", result)
 
 db.commit()
-'''
