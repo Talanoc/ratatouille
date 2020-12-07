@@ -1,16 +1,16 @@
 # Ratatouille
 
 Utilisation de l'application<br/>
-Au lancement, l'application vérifie l'existance de la base de données ratatouille (création de la base si elle n'existe pas)
+Au lancement, l'application vérifie l'existance de la base de données ratatouille (création de la base si elle n'existe pas)<br/>
 
-Affichage du premier menu
-******************************************************************<br/>
+Affichage du premier menu<br/>
+
 ****  0:Exit   <br/>
 ****  1:change product<br/>
 ****  2:history<br/>
 ****  3:display owner_product<br/>
 ****  votre choix:<br/>
-******************************************************************<br/>
+
 
 
 
