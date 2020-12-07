@@ -6,9 +6,10 @@ Au lancement, l'application vérifie l'existance de la base de données ratatoui
 Affichage du premier menu<br/>
 
 ****  0:Exit   <br/>
-****  1:change product<br/>
-****  2:history<br/>
-****  3:display owner_product<br/>
+****  1:Changement de produit<br/>
+****  2:Historique<br/>
+****  3:Réinitialiser les bases de données<br/>
+<br/>
 ****  votre choix:<br/>
 
 
