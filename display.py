@@ -5,12 +5,12 @@ Created on Mon Nov  9 15:38:38 2020
 @author: 33633
 """
 
-import mysql.connector
-from constants import *
+# import mysql.connector
+from constants import ligne, ligne1, error1, db_name, bienvenue,\
+    display_cat, categories, replace, replace_choice, nutri_list
 from database import Database
-import random
 import sys
-
+# from os import system
 choice = 0
 x = 0
 
@@ -38,7 +38,7 @@ class Menus(Database):
         print("")
         print(ligne)
 
-        self.choice = int(input("What do you want to do ? : "))
+        self.choice = int(input("Que voulez-vous faire ? : "))
 
         if self.choice == 0:
             print("Au revoir")
@@ -54,22 +54,37 @@ class Menus(Database):
             self.destruct_db()
             print("La base de données est effaçée")
             sys.exit()
-
+        else:
+            print("!!!!!      Choix invalide                 !!!!!!!!")
+            self.first_display()
     def change_product(self):
+        """
+        Program run if the choice of first_display is 1.
 
+        Returns
+        -------
+        None.
+
+        """
         self.category_display()
         self.product_display()
+        self.replace_display()
         self.good_choice()
         self.nutri_test()
         self.first_display()
 
     def category_display(self):
+        """
+        Display of category list & category select.
 
-        # printing the categories list using loop
+        -------
+        Selection of category number.
+        The selected number is placed in the variable self.cat.
+        """
         print(ligne)
         print(display_cat)
         print(ligne)
-        
+
         for x in range(len(categories)):
             print("")
             print(x+1, categories[x])
@@ -81,110 +96,140 @@ class Menus(Database):
         self.choice = int(input("Quelle categorie ? :"))
 
         if self.choice >= int(len(categories)+1):
-            print("!!!! Entrée n'appartenant à la liste.Retour au\
-                  départ  !!!!")
+            print("!!!! Entrée n'appartenant à la liste.Retour au départ  !!!!")
             self.first_display()
         else:
-            self.cat =str(self.choice)
+            self.cat = str(self.choice)
 
     def product_display(self):
+        """
+        Display of the list of products in the category.& product select.
 
+        -------
+        Selection of a product in the list.
+        The selected number is placed in the variable self.origin_product.
+        """
         x = 0
         self.connect()
-        self.cur.execute('SELECT id,category,product_name_fr,nutrition_grades\
-                         FROM db_product where category ='+ self.cat)
-        result = (self.cur.fetchall())
-        
-# random generation of the product to be replaced
-        self.origin_product = (random.choice(result))
-        
-# display of the product to be replaced
+        self.cur.execute('SELECT id,category_id,product_name_fr,nutrition_grades\
+                         FROM db_product where category_id =' + self.cat)
+        self.result = (self.cur.fetchall())
+
         print(ligne)
         print(replace)
         print(ligne)
+        for x in range(len(self.result)):
+            print(self.result[x])
+        print(ligne)
+        print(ligne1)
 
-        print(self.origin_product)
-# display of the replacement list
+        self.origin_product = (input("Quelle produit voulez vous remplacer ? :"))
+
+        self.cur.execute('SELECT id,category_id,product_name_fr,nutrition_grades\
+                         FROM db_product where id =' + self.origin_product)
+        self.origin_product = (self.cur.fetchone())
+        
+        if int(self.origin_product[1]) != int(self.cat):
+            print("!!!!          Choix n'appartenant pas à la liste    !!!!!")
+            self.product_display()
+        else:
+            pass
+
+
+    def replace_display(self):
+        """
+        Display of the list of products with a better nutriscore & \
+            product select.
+
+        -------
+        Selection of a product in the list.
+        The selected number is placed in the variable self.replace_product.
+        """
         print(ligne)
         print(replace_choice)
         print(ligne)
 
-        for x in range(len(result)):
-            print(result[x])
+        a = 0
+        for x in range(len(self.result)):
+            self.replace_choice = self.result[x]
+            if nutri_list.index(self.origin_product[3]) >\
+                    nutri_list.index(self.replace_choice[3]):
+                a += 1
+                print(self.replace_choice)
 
-        print(ligne)
+        if a == 0:
+            print(ligne1)
+            print("Pas de produits ayant un meilleur nutriscore")
+            print(ligne1)
+            self.first_display()
 # replacement product entry
-        self.choice = str(input("produit de remplacement? :"))
+        self.choice = str(input("produit de substitution ? :"))
+
 # loading of the data corresponding to the product replace
-        self.cur.execute('SELECT id,category,product_name_fr,nutrition_grades \
+        self.cur.execute('SELECT id,category_id,product_name_fr,nutrition_grades \
                          FROM db_product where id ='+self.choice)
         self.replace_product = (self.cur.fetchone())
-        
+        self.result_display()
+
+    def result_display(self):
+        """
+        Display of the starting product and the exchanged one.
+
+        -------
+        None.
+        """
         print(ligne)
         print("produit de départ", self.origin_product)
         print("produit de remplacement :", self.replace_product)
         print(ligne)
 
     def good_choice(self):
+        """
+        Check if the product is part of the category and if the product is\
+            different from the starting product.
 
+        -------
+        Creation of the self.user list.
+        """
         self.connect()
         if self.origin_product[1] == self.replace_product[1] and\
                 self.origin_product[0] != self.replace_product[0]:
-# product in the same category 
+
             self.user = (self.origin_product[0], self.replace_product[0])
 
         else:
-# product not belonging to the same category
+
             print(ligne)
             print(error1)
             print(ligne)
             self.choice = str(input("produit de remplacement? :"))
-            self.cur.execute('SELECT id,category,product_name_fr,\
-                        nutrition_grades FROM db_product where id ='+self.choice)
+            self.cur.execute('SELECT id,category_id,product_name_fr,\
+                    nutrition_grades FROM db_product where id ='+self.choice)
             self.replace_product = (self.cur.fetchone())
+            self.result_display()
             self.good_choice()
 
     def nutri_test(self):
+        """
+        Save the self.user list in the history-product table.
 
-        user=(self.origin_product[0],self.replace_product[0])
+        -------
+        None.
+        """
         self.connect()
 
-        if nutri_list.index(self.origin_product[3]) >=\
-                nutri_list.index(self.replace_product[3]):
-            print("*****     Echange enregistré              *****")
-            self.cur.execute("""INSERT INTO history_product(product_id,replace_id)\
-                             VALUES (%s,%s)""", user)
-            self.db.commit()
-            self.first_display()
-        else:
-            print(ligne)
-            print(error2)
-            print(ligne)
-
-            self.choice = str(input("Sauvegarder quand même (Y/N) ? :"))
-
-            if self.choice == "y" or self.choice == "Y":
-                self.cur.execute("""INSERT INTO history_product (product_id,replace_id)\
-                                 VALUES (%s,%s)""", user)
-                self.db.commit()
-
-            elif self.choice == "n" or self.choice == "N":
-                pass
-
-            else:
-                print("Il faut répondre par Y ou N ")
-                #self.first_display()
-
-    def product_choice(self):
-        self.connect()
-
-        self.choice = str(input("produit de remplacement? :"))
-        self.cur.execute('SELECT id,category,product_name_fr,nutrition_grades\
-                         FROM db_product where id ='+self.choice)
-        self.replace_product = (self.cur.fetchone())
+        print("*****     Echange enregistré              *****")
+        self.cur.execute("""INSERT INTO history_product(product_id,\
+                         replace_id) VALUES (%s,%s)""", self.user)
+        self.db.commit()
 
     def history_display(self):
+        """
+        Display replacement history.
 
+        -------
+        None.
+        """
         self.connect()
         self.cur.execute('SELECT * FROM history_product')
         self.history_product = (self.cur.fetchall())
@@ -193,7 +238,8 @@ class Menus(Database):
             print(ligne1)
             print("Date de changement:", date)
             print(ligne1)
-            self.cur.execute('SELECT product_name_fr,brands,nutrition_grades,url\
+            self.cur.execute('SELECT product_name_fr,\
+                             brands,nutrition_grades,url\
                              FROM db_product where id =' + start)
             start_product = (self.cur.fetchall())
             print("produit de départ:")
@@ -201,13 +247,13 @@ class Menus(Database):
             print(start_product)
             print(ligne1)
 
-            self.cur.execute('SELECT product_name_fr,brands,nutrition_grades,url\
+            self.cur.execute('SELECT product_name_fr,\
+                             brands,nutrition_grades,url\
                              FROM db_product where id =' + end)
 
-            end_product=(self.cur.fetchall())
+            end_product = (self.cur.fetchall())
             print("produit de remplacement:")
             print(ligne1)
             print(end_product)
             print(ligne1)
         self.first_display()
-

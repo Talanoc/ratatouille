@@ -13,10 +13,9 @@ nutri_list = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
 # ------------ Some Categories from OpenFood Facts ------------ #
 categories = [
-    "Eaux",
+    "Laits",
     "Poissons",
     "Viandes",
-    "Jambons",
     "Desserts",
     "Plats préparés surgelés",
     "Fromages de France",
@@ -42,7 +41,7 @@ chosen_fields = [
 table_category_product = """
             CREATE TABLE IF NOT EXISTS category_product (
                        id INT AUTO_INCREMENT,
-                       category VARCHAR(255),
+                       category_name VARCHAR(255),
                        PRIMARY KEY (id)
 );
 """
@@ -50,7 +49,7 @@ table_category_product = """
 table_db_product = """
             CREATE TABLE IF NOT EXISTS db_product (
                        id SMALLINT UNSIGNED AUTO_INCREMENT,
-                       category INT,
+                       category_id INT,
                        code VARCHAR(13),
                        brands VARCHAR(100),
                        product_name_fr VARCHAR(200),
@@ -59,7 +58,7 @@ table_db_product = """
                        url VARCHAR(300),
                        PRIMARY KEY (id),
                        CONSTRAINT fk_sub_id FOREIGN KEY (
-                           category) REFERENCES category_product(id)
+                           category_id) REFERENCES category_product(id)
 );
 """
 
@@ -80,7 +79,7 @@ ligne1 = ("-----------------------------------------------------------------")
 ligne = ("*************************************************************")
 bienvenue = ("*****       Bienvenue sur ratatouille                   *****")
 display_cat = ("*****       Dans quelle categorie ?                     *****")
-replace = ("*****       Produit à remplacer:                        *****")
+replace = ("*****       Liste des produits de la categorie              *****")
 replace_choice = ("*****       Produits de remplacement                    *****")
 error1 = ("*****      Choisir un produit dans la liste !!!!!       *****")
-error2 = ("*****      Le nutriscore est moins bon !!!!!            *****")
+

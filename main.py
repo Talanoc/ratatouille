@@ -4,9 +4,8 @@ Created on Fri Oct 30 23:05:30 2020
 
 @author: 33633
 """
-import requests
+
 from database import Database
-from constants import *
 from display import Menus
 
 
@@ -16,10 +15,9 @@ def main():
     ratatouille = Menus()
 
     try:
-        ratatouille_db.use_db()
+        ratatouille_db.connect()
 
     except:
-
         ratatouille_db.create_db()
         ratatouille_db.insert_category()
         print("La base est en cours de chargement")
@@ -27,11 +25,9 @@ def main():
         ratatouille.first_display()
 
     else:
-
         ratatouille.first_display()
 
 
 if __name__ == '__main__':
 
     main()
-
