@@ -1,12 +1,9 @@
-# ratatouille
+# Ratatouille
 
-First use:<br/>
-1 :load data from the open food facts API<br/>
-At the first start, the program sets up the ratatouille database<br/>
+Utilisation de l'application<br/>
+Au lancement, l'application vérifie l'existance de la base de données ratatouille (création de la base si elle n'existe pas)
 
-2:first menu display<br/>
-the following menu allows the user to choose the function used<br/>
-
+Affichage du premier menu
 ******************************************************************<br/>
 ****  0:Exit   <br/>
 ****  1:change product<br/>
@@ -14,6 +11,8 @@ the following menu allows the user to choose the function used<br/>
 ****  3:display owner_product<br/>
 ****  votre choix:<br/>
 ******************************************************************<br/>
+
+
 
 3:change product menu (2/1)<br/>
 choice of the category in which you want to replace a product<br/>
