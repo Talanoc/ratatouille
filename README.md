@@ -20,7 +20,6 @@ choice of the category in which you want to replace a product<br/>
 
 ******************************************************************<br/>
 ****    Categories:<br/>
-****  0:exit<br/>
 ****  1:Eau<br/>
 ****  2:xxxx<br/>
 ****  3:xxxx<br/>
@@ -28,6 +27,7 @@ choice of the category in which you want to replace a product<br/>
 ****  5:xxxx<br/>
 ****  6:xxxx<br/>
 ****  7:xxxx<br/>
+****  x:Retour au menu précédent
 ****...................<br/>
 ****  votre choix:<br/>
 *****************************************************************<br/>
