@@ -4,10 +4,10 @@ Utilisation de l'application<br/>
 Au lancement, l'application vérifie l'existance de la base de données ratatouille (création de la base si elle n'existe pas)<br/>
 <br/>
 Affichage du premier menu<br/>
-0:Exit   <br/>
-1:Changement de produit<br/>
-2:Historique<br/>
-3:Réinitialiser les bases de données<br/>
+0: Exit   <br/>
+1: Changement de produit<br/>
+2: Historique<br/>
+3: Réinitialiser les bases de données<br/>
 votre choix:<br/>
 <br/>
 ******************************************************<br/>
