@@ -2,63 +2,30 @@
 
 Utilisation de l'application<br/>
 Au lancement, l'application vérifie l'existance de la base de données ratatouille (création de la base si elle n'existe pas)<br/>
-
+<br/>
 Affichage du premier menu<br/>
-
 0:Exit   <br/>
 1:Changement de produit<br/>
 2:Historique<br/>
 3:Réinitialiser les bases de données<br/>
-<br/>
 votre choix:<br/>
 <br/>
+******************************************************<br/>
+Le choix est 0<br/>
+Femeture du programme<br/>
 <br/>
-Exit :<br/>
-Femeture du programme
+******************************************************<br/>
+Le choix est 1<br/>
+Affichage de la liste des categories<br/>
+Après la selection de la categorie, affichage de la liste des produits dans la categorie<br/>
+Après la selection du produit à remplacer, affichage de la liste des produits ayant un meilleur nutriscore<br/>
+Enregistrement du remplacement si le nutriscore est meilleur et retour à l'affichage de départ<br/>
 <br/>
+******************************************************<br/>
+Le choix est 2<br/>
+Affichage des remplacements éffectués par l'utilisateur<br/>
 <br/>
-Changement de produit<br/>
-affichage de la liste des categories<br/>
+******************************************************<br/>
+Le choix est 3<br/>
+La base de données est effacée<br/>
 <br/>
-<br/>
-Categories:<br/>
-1:Eau<br/>
-2:xxxx<br/>
-3:xxxx<br/>
-4:xxxx<br/>
-5:xxxx<br/>
-6:xxxx<br/>
-7:xxxx<br/>
-x:Retour au menu précédent
-<br/>
-votre choix:<br/>
-<br/>
-<br/>
-
-4:historical display (2/2)<br/>
-display of the replacement history stored in the history_product database<br/>
-
-*****************************************************************<br/>
-**** date:product(nutriscore) replaced by product (nutriscore)***<br/>
-**** date:product(nutriscore) replaced by product (nutriscore)***<br/>
-**** date:product(nutriscore) replaced by product (nutriscore)***<br/>
-**** date:product(nutriscore) replaced by product (nutriscore)***<br/>
-****.........................<br/>;
-*****************************************************************<br/>
-
-5:product by category (3/1)<br/>
-display of all the products of a category<br/>
-
-*****************************************************************<br/>
-****     1:Eaux<br/>
-****0:exit<br/>
-****1:product /brand/nutriscore/url<br/>
-****2:product /brand/nutriscore/url<br/>
-****3:product /brand/nutriscore/url<br/>
-****4:product /brand/nutriscore/url<br/>
-****5:product /brand/nutriscore/url<br/>
-****6:product /brand/nutriscore/url<br/>
-****7:product /brand/nutriscore/url<br/>
-****...................<br/>
-****votre choix:<br/>;
-*****************************************************************<br/>
