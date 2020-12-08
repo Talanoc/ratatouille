@@ -5,32 +5,35 @@ Au lancement, l'application vérifie l'existance de la base de données ratatoui
 
 Affichage du premier menu<br/>
 
-****  0:Exit   <br/>
-****  1:Changement de produit<br/>
-****  2:Historique<br/>
-****  3:Réinitialiser les bases de données<br/>
+0:Exit   <br/>
+1:Changement de produit<br/>
+2:Historique<br/>
+3:Réinitialiser les bases de données<br/>
 <br/>
-****  votre choix:<br/>
-
-
-
-
-3:change product menu (2/1)<br/>
-choice of the category in which you want to replace a product<br/>
-
-******************************************************************<br/>
-****    Categories:<br/>
-****  1:Eau<br/>
-****  2:xxxx<br/>
-****  3:xxxx<br/>
-****  4:xxxx<br/>
-****  5:xxxx<br/>
-****  6:xxxx<br/>
-****  7:xxxx<br/>
-****  x:Retour au menu précédent
-****...................<br/>
-****  votre choix:<br/>
-*****************************************************************<br/>
+votre choix:<br/>
+<br/>
+<br/>
+Exit :<br/>
+Femeture du programme
+<br/>
+<br/>
+Changement de produit<br/>
+affichage de la liste des categories<br/>
+<br/>
+<br/>
+Categories:<br/>
+1:Eau<br/>
+2:xxxx<br/>
+3:xxxx<br/>
+4:xxxx<br/>
+5:xxxx<br/>
+6:xxxx<br/>
+7:xxxx<br/>
+x:Retour au menu précédent
+<br/>
+votre choix:<br/>
+<br/>
+<br/>
 
 4:historical display (2/2)<br/>
 display of the replacement history stored in the history_product database<br/>
